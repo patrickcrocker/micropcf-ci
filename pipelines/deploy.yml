@@ -1,26 +1,26 @@
 ---
 resources:
-  - name: lattice-ci
+  - name: cf-local-ci
     type: git
     source:
-      uri: https://github.com/cloudfoundry-incubator/lattice-ci.git
+      uri: https://github.com/cloudfoundry-incubator/cf-local-ci.git
       branch: master
-  - name: lattice-website
+  - name: cf-local-website
     type: git
     source:
-      uri: git@github.com:pivotal-cf-experimental/lattice-website
+      uri: git@github.com:pivotal-cf-experimental/cf-local-website
       branch: master
       private_key: {{github-ssh-key}}
-  - name: lattice-ci-image-changes
+  - name: cf-local-ci-image-changes
     type: git
     source:
-      uri: https://github.com/cloudfoundry-incubator/lattice-ci.git
+      uri: https://github.com/cloudfoundry-incubator/cf-local-ci.git
       branch: master
       paths: [Dockerfile]
-  - name: lattice-ci-image
+  - name: cf-local-ci-image
     type: docker-image
     source:
-      repository: cloudfoundry/lattice-ci
+      repository: cloudfoundry/cf-local-ci
       email: {{docker-hub-email}}
       username: {{docker-hub-username}}
       password: {{docker-hub-password}}
@@ -54,33 +54,33 @@ resources:
       deployment: concourse-vsphere
 
 jobs:
-  - name: deploy-lattice-website
+  - name: deploy-cf-local-website
     plan:
     - aggregate:
-      - get: lattice-ci
-      - get: lattice-website
-    - task: deploy-lattice-website
-      file: lattice-ci/tasks/deploy-lattice-website/task.yml
+      - get: cf-local-ci
+      - get: cf-local-website
+    - task: deploy-cf-local-website
+      file: cf-local-ci/tasks/deploy-cf-local-website/task.yml
       config:
         params:
           GITHUB_SSH_KEY: {{github-ssh-key}}
 
-  - name: docker-push-lattice-ci
+  - name: docker-push-cf-local-ci
     plan:
-    - get: lattice-ci
-      resource: lattice-ci-image-changes
+    - get: cf-local-ci
+      resource: cf-local-ci-image-changes
       trigger: true
-    - put: lattice-ci-image
+    - put: cf-local-ci-image
       params:
-        build: lattice-ci
+        build: cf-local-ci
         push: true
 
   - name: apply-cloudformation
     serial_groups: [bosh]
     plan:
-    - get: lattice-ci
+    - get: cf-local-ci
     - task: apply-cloudformation
-      file: lattice-ci/tasks/apply-cloudformation/task.yml
+      file: cf-local-ci/tasks/apply-cloudformation/task.yml
       config:
         params:
           CLOUDFORMATION_STACK_NAME: concourse
@@ -92,10 +92,10 @@ jobs:
   - name: deploy-bosh
     serial_groups: [bosh]
     plan:
-    - get: lattice-ci
+    - get: cf-local-ci
       passed: [apply-cloudformation]
     - task: deploy-bosh
-      file: lattice-ci/tasks/deploy-bosh/task.yml
+      file: cf-local-ci/tasks/deploy-bosh/task.yml
       config:
         params:
           CLOUDFORMATION_STACK_NAME: concourse
@@ -107,7 +107,7 @@ jobs:
   - name: deploy-concourse
     serial_groups: [bosh]
     plan:
-    - get: lattice-ci
+    - get: cf-local-ci
     - aggregate:
       - get: stemcell
       - get: concourse-release
@@ -116,7 +116,7 @@ jobs:
           - concourse-*.tgz
           - garden-linux-*.tgz
       - task: generate-concourse-manifest
-        file: lattice-ci/tasks/generate-concourse-manifest/task.yml
+        file: cf-local-ci/tasks/generate-concourse-manifest/task.yml
         config:
           params:
             CONCOURSE_USERNAME: {{concourse-username}}
@@ -142,10 +142,10 @@ jobs:
   - name: deploy-vsphere-bosh
     serial_groups: [vsphere-bosh]
     plan:
-    - get: lattice-ci
+    - get: cf-local-ci
     - task: deploy-vsphere-bosh
       tags: [vsphere-linux-worker]
-      file: lattice-ci/tasks/deploy-vsphere-bosh/task.yml
+      file: cf-local-ci/tasks/deploy-vsphere-bosh/task.yml
       config:
         params:
           VCENTER_ADDRESS: {{vcenter-address}}
@@ -155,7 +155,7 @@ jobs:
   - name: deploy-vsphere-worker
     serial_groups: [vsphere-bosh]
     plan:
-    - get: lattice-ci
+    - get: cf-local-ci
     - aggregate:
       - get: vsphere-stemcell
       - get: concourse-release
@@ -165,7 +165,7 @@ jobs:
           - garden-linux-*.tgz
       - task: generate-vsphere-worker-manifest
         tags: [vsphere-linux-worker]
-        file: lattice-ci/tasks/generate-vsphere-worker-manifest/task.yml
+        file: cf-local-ci/tasks/generate-vsphere-worker-manifest/task.yml
         config:
           params:
             VSPHERE_WORKER_PRIVATE_KEY: {{vsphere-worker-private-key}}

@@ -2,16 +2,16 @@
 
 set -ex
 
-dot_lattice_dir=$HOME/.lattice
-terraform_tmp_dir=$PWD/deploy-terraform-aws/lattice-bundle-v*/terraform/aws
+dot_cf_local_dir=$HOME/.cf-local
+terraform_tmp_dir=$PWD/deploy-terraform-aws/cf-local-bundle-v*/terraform/aws
 
-mkdir -p $dot_lattice_dir
+mkdir -p $dot_cf_local_dir
 
 pushd $terraform_tmp_dir >/dev/null
     target=$(terraform output target)
     username=$(terraform output username)
     password=$(terraform output password)
-    cat > $dot_lattice_dir/config.json <<EOF
+    cat > $dot_cf_local_dir/config.json <<EOF
 {
     "target": "${target}",
     "username": "${username}",

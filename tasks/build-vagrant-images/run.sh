@@ -26,7 +26,7 @@ fi
 
 git -C vagrant-image-changes submodule update --init --recursive
 
-lattice_json=$(cat vagrant-image-changes/vagrant/lattice.json)
+cf_local_json=$(cat vagrant-image-changes/vagrant/cf-local.json)
 post_processor_json=`
 cat <<EOF
 {
@@ -38,7 +38,7 @@ cat <<EOF
       "type": "atlas",
       "only": ["amazon-ebs"],
       "token": "$ATLAS_TOKEN",
-      "artifact": "lattice/colocated",
+      "artifact": "cf-local/colocated",
       "artifact_type": "vagrant.box",
       "metadata": {
         "provider": "aws",
@@ -49,7 +49,7 @@ cat <<EOF
       "type": "atlas",
       "only": ["vmware-iso"],
       "token": "$ATLAS_TOKEN",
-      "artifact": "lattice/colocated",
+      "artifact": "cf-local/colocated",
       "artifact_type": "vagrant.box",
       "metadata": {
         "provider": "vmware_desktop",
@@ -60,7 +60,7 @@ cat <<EOF
       "type": "atlas",
       "only": ["virtualbox-iso"],
       "token": "$ATLAS_TOKEN",
-      "artifact": "lattice/colocated",
+      "artifact": "cf-local/colocated",
       "artifact_type": "vagrant.box",
       "metadata": {
         "provider": "virtualbox",
@@ -72,7 +72,7 @@ cat <<EOF
 EOF
 `
 
-echo $lattice_json | jq '. + '"$post_processor_json" > vagrant-image-changes/vagrant/lattice.json
+echo $cf_local_json | jq '. + '"$post_processor_json" > vagrant-image-changes/vagrant/cf-local.json
 
 ssh-keyscan $REMOTE_EXECUTOR_ADDRESS >> $HOME/.ssh/known_hosts
 remote_path=$(ssh -i remote_executor.pem vcap@$REMOTE_EXECUTOR_ADDRESS mktemp -d /tmp/build-vagrant-images.XXXXXXXX)

@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/lattice-ci
+image: docker:///cloudfoundry/cf-local-ci
 inputs:
-- name: lattice-ci
+- name: cf-local-ci
 - name: next-vagrant-box-version
 run:
-  path: lattice-ci/tasks/cleanup-incomplete-build-vagrant/run.sh
+  path: cf-local-ci/tasks/cleanup-incomplete-build-vagrant/run.sh
 params:
   ATLAS_TOKEN: some-atlas-token
   PROVIDERS: some-providers

@@ -1,10 +1,10 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/lattice-ci
+image: docker:///cloudfoundry/cf-local-ci
 inputs:
-- name: lattice-ci
+- name: cf-local-ci
 run:
-  path: lattice-ci/tasks/generate-vsphere-worker-manifest/run.sh
+  path: cf-local-ci/tasks/generate-vsphere-worker-manifest/run.sh
 params:
   VSPHERE_WORKER_PRIVATE_KEY: some-vsphere-worker-private-key
   CONCOURSE_TSA_PUBLIC_KEY: some-concourse-tsa-public-key

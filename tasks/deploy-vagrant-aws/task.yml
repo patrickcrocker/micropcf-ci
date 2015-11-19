@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/lattice-ci
+image: docker:///cloudfoundry/cf-local-ci
 inputs:
-- name: lattice-ci
-- name: lattice-bundle-ci
+- name: cf-local-ci
+- name: cf-local-bundle-ci
 run:
-  path: lattice-ci/tasks/deploy-vagrant-aws/run.sh
+  path: cf-local-ci/tasks/deploy-vagrant-aws/run.sh
 params:
   AWS_ACCESS_KEY_ID: some-access-key-id
   AWS_SECRET_ACCESS_KEY: some-secret-access-key

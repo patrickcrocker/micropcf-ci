@@ -1,10 +1,10 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/lattice-ci
+image: docker:///cloudfoundry/cf-local-ci
 inputs:
-- name: lattice-ci
+- name: cf-local-ci
 run:
-  path: lattice-ci/tasks/apply-cloudformation/run.sh
+  path: cf-local-ci/tasks/apply-cloudformation/run.sh
 params:
   CLOUDFORMATION_STACK_NAME: some-stack-name
   CERTIFICATE_NAME: some-certificate-name

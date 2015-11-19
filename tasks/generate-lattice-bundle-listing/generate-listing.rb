@@ -9,16 +9,16 @@ service = S3::Service.new(
   secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
 )
 
-S3_BUCKET = 'lattice'
+S3_BUCKET = 'cf-local'
 
 objs_by_day = {}
 service.buckets.find(S3_BUCKET).objects.each do |obj|
-	next if !obj.key.start_with?('nightly/lattice-bundle')
-	next if obj.key.start_with?('nightly/lattice-bundle-latest-')
+	next if !obj.key.start_with?('nightly/cf-local-bundle')
+	next if obj.key.start_with?('nightly/cf-local-bundle-latest-')
 
 	arch = /-([^-]+)\.zip$/.match(obj.key)[1]
 	has_arch = ['osx', 'linux'].include?(arch)
-	regex = ( has_arch ? /lattice-bundle-(.+?)-[^-]+\.zip$/ : /lattice-bundle-(.+?)\.zip$/ )
+	regex = ( has_arch ? /cf-local-bundle-(.+?)-[^-]+\.zip$/ : /cf-local-bundle-(.+?)\.zip$/ )
 	version = regex.match(obj.key)[1]
 
 	objs_by_day[obj.last_modified.to_date] ||= {}

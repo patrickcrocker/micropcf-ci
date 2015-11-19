@@ -1,14 +1,14 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/lattice-ci
+image: docker:///cloudfoundry/cf-local-ci
 inputs:
-- name: lattice-ci
+- name: cf-local-ci
 - name: vagrant-image-changes
 - name: current-vagrant-box-version
 - name: next-vagrant-box-version
 - name: vagrant-box-commit
 run:
-  path: lattice-ci/tasks/build-vagrant-images/run.sh
+  path: cf-local-ci/tasks/build-vagrant-images/run.sh
 params:
   ATLAS_TOKEN: some-atlas-token
   GITHUB_SSH_KEY: some-github-ssh-key

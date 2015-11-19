@@ -18,7 +18,7 @@ AVAILABILITY_ZONE=$(get_stack_output AvailabilityZone)
 SECURITY_GROUP_ID=$(get_stack_output BOSHSecurityGroupID)
 SECURITY_GROUP_NAME=$(aws ec2 describe-security-groups --group-ids=$SECURITY_GROUP_ID | jq -r .SecurityGroups[0].GroupName)
 
-cp lattice-ci/tasks/deploy-bosh/manifest.yml .
+cp cf-local-ci/tasks/deploy-bosh/manifest.yml .
 
 sed -i "s/AVAILABILITY-ZONE/$AVAILABILITY_ZONE/g" manifest.yml
 sed -i "s/ELASTIC-IP/$ELASTIC_IP/g" manifest.yml

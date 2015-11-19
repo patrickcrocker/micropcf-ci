@@ -26,7 +26,7 @@ git -C terraform-image-changes submodule update --init --recursive
 terraform-image-changes/terraform/build -machine-readable -var "version=$next_version" | tee build.log
 [[ ${PIPESTATUS[0]} != 0 ]] && exit 1
 
-tail -50 build.log | lattice-ci/tasks/build-terraform-images/parse-build-output.rb | jq . > ami-metadata-v${next_version}.tf.json
+tail -50 build.log | cf-local-ci/tasks/build-terraform-images/parse-build-output.rb | jq . > ami-metadata-v${next_version}.tf.json
 echo -n $next_ami_commit > ami-commit-v$next_version
 echo -n $next_version > ami-version-number
 

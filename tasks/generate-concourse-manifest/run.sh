@@ -19,7 +19,7 @@ ELB_NAME=$(get_stack_output WebELBLoadBalancerName)
 
 FORMATTED_CONCOURSE_TSA_PRIVATE_KEY=$(echo -n "$CONCOURSE_TSA_PRIVATE_KEY" | perl -p -e 's/\n/\\\\n/g')
 
-cp lattice-ci/tasks/generate-concourse-manifest/manifest.yml .
+cp cf-local-ci/tasks/generate-concourse-manifest/manifest.yml .
 
 sed -i "s/BOSH-UUID/$BOSH_UUID/g" manifest.yml
 sed -i "s/CONCOURSE-USERNAME/$CONCOURSE_USERNAME/g" manifest.yml

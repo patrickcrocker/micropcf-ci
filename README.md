@@ -1,2 +1,2 @@
-# lattice-ci
-CI pipelines and tasks for Lattice
+# cf-local-ci
+CI pipelines and tasks for CF Local

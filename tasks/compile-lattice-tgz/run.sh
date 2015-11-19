@@ -2,5 +2,5 @@
 
 set -ex
 
-lattice_tgz_version=$(cat lattice-tgz-version/number)
-./lattice-release/release/build "lattice-v${lattice_tgz_version}.tgz" "$lattice_tgz_version"
+cf_local_tgz_version=$(cat cf-local-tgz-version/number)
+./cf-local-release/release/build "cf-local-v${cf_local_tgz_version}.tgz" "$cf_local_tgz_version"

@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/lattice-ci
+image: docker:///cloudfoundry/cf-local-ci
 inputs:
-- name: lattice-ci
-- name: lattice-release
-- name: lattice-tgz
+- name: cf-local-ci
+- name: cf-local-release
+- name: cf-local-tgz
 - name: vagrant-box-version
 - name: terraform-ami-metadata
 run:
-  path: lattice-ci/tasks/build-bundle/run.sh
+  path: cf-local-ci/tasks/build-bundle/run.sh

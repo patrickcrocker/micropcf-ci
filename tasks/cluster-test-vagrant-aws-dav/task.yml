@@ -1,8 +1,8 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/lattice-ci
+image: docker:///cloudfoundry/cf-local-ci
 inputs:
-- name: lattice-ci
+- name: cf-local-ci
 - name: deploy-vagrant-aws
 run:
-  path: lattice-ci/tasks/cluster-test-vagrant-aws-dav/run.sh
+  path: cf-local-ci/tasks/cluster-test-vagrant-aws-dav/run.sh

@@ -1,10 +1,10 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/lattice-ci
+image: docker:///cloudfoundry/cf-local-ci
 inputs:
-- name: lattice-ci
+- name: cf-local-ci
 run:
-  path: lattice-ci/tasks/deploy-bosh/run.sh
+  path: cf-local-ci/tasks/deploy-bosh/run.sh
 params:
   CLOUDFORMATION_STACK_NAME: some-stack-name
   AWS_DEFAULT_REGION: some-aws-region
