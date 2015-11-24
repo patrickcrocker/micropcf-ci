@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/cf-local-ci
+image: docker:///cloudfoundry/forge-ci
 inputs:
-- name: cf-local-ci
-- name: cf-local-bundle-ci
+- name: forge-ci
+- name: forge-bundle-ci
 run:
-  path: cf-local-ci/tasks/deploy-vagrant-aws/run.sh
+  path: forge-ci/tasks/deploy-vagrant-aws/run.sh
 params:
   AWS_ACCESS_KEY_ID: some-access-key-id
   AWS_SECRET_ACCESS_KEY: some-secret-access-key

@@ -2,5 +2,5 @@
 
 set -ex
 
-cf_local_tgz_version=$(cat cf-local-tgz-version/number)
-./cf-local-release/release/build "cf-local-v${cf_local_tgz_version}.tgz" "$cf_local_tgz_version"
+forge_tgz_version=$(cat forge-tgz-version/number)
+./forge-release/release/build "forge-v${forge_tgz_version}.tgz" "$forge_tgz_version"

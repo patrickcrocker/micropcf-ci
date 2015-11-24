@@ -5,6 +5,6 @@ set -ex
 export AWS_SSH_PRIVATE_KEY_PATH=$PWD/key.pem
 echo "$AWS_SSH_PRIVATE_KEY" > "$AWS_SSH_PRIVATE_KEY_PATH"
 
-pushd deploy-vagrant-aws/cf-local-bundle-v*/vagrant >/dev/null
+pushd deploy-vagrant-aws/forge-bundle-v*/vagrant >/dev/null
   vagrant destroy -f
 popd >/dev/null

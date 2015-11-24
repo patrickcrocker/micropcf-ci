@@ -1,10 +1,10 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/cf-local-ci
+image: docker:///cloudfoundry/forge-ci
 inputs:
-- name: cf-local-ci
+- name: forge-ci
 run:
-  path: cf-local-ci/tasks/generate-concourse-manifest/run.sh
+  path: forge-ci/tasks/generate-concourse-manifest/run.sh
 params:
   CONCOURSE_USERNAME: some-concourse-username
   CONCOURSE_PASSWORD: some-concourse-password

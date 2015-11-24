@@ -2,7 +2,7 @@
 
 set -ex
 
-TEMPLATE_PATH=$PWD/cf-local-ci/tasks/apply-cloudformation/cloudformation.json
+TEMPLATE_PATH=$PWD/forge-ci/tasks/apply-cloudformation/cloudformation.json
 
 if aws cloudformation describe-stacks --stack-name "$CLOUDFORMATION_STACK_NAME" >/dev/null 2>/dev/null; then
   aws cloudformation update-stack --stack-name "$CLOUDFORMATION_STACK_NAME" \

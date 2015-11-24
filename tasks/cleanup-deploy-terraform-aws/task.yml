@@ -1,8 +1,8 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/cf-local-ci
+image: docker:///cloudfoundry/forge-ci
 inputs:
-- name: cf-local-ci
+- name: forge-ci
 - name: deploy-terraform-aws
 run:
-  path: cf-local-ci/tasks/cleanup-deploy-terraform-aws/run.sh
+  path: forge-ci/tasks/cleanup-deploy-terraform-aws/run.sh

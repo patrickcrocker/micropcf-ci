@@ -58,7 +58,7 @@ jobs:
       baggageclaim:
         forward_address: 127.0.0.1:7788
       tsa:
-        host: ci.cf-local.cf
+        host: ci.forge.cf
         host_public_key: TSA-PUBLIC-KEY
         private_key: WORKER-PRIVATE-KEY
 

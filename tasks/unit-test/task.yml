@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/cf-local-ci
+image: docker:///cloudfoundry/forge-ci
 inputs:
-- name: cf-local-ci
-- name: cf-local-release
+- name: forge-ci
+- name: forge-release
 run:
-  path: cf-local-ci/tasks/unit-test/run.sh
+  path: forge-ci/tasks/unit-test/run.sh
 params:
   PACKAGE: some-package
 

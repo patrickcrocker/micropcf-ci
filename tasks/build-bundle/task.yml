@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/cf-local-ci
+image: docker:///cloudfoundry/forge-ci
 inputs:
-- name: cf-local-ci
-- name: cf-local-release
-- name: cf-local-tgz
+- name: forge-ci
+- name: forge-release
+- name: forge-tgz
 - name: vagrant-box-version
 - name: terraform-ami-metadata
 run:
-  path: cf-local-ci/tasks/build-bundle/run.sh
+  path: forge-ci/tasks/build-bundle/run.sh

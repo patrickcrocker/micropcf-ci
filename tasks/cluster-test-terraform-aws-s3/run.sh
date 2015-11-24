@@ -2,16 +2,16 @@
 
 set -ex
 
-dot_cf_local_dir=$HOME/.cf-local
-terraform_dir=$PWD/deploy-terraform-aws/cf-local-bundle-v*/terraform/aws
+dot_forge_dir=$HOME/.forge
+terraform_dir=$PWD/deploy-terraform-aws/forge-bundle-v*/terraform/aws
 
-mkdir -p $dot_cf_local_dir
+mkdir -p $dot_forge_dir
 
 pushd $terraform_dir >/dev/null
     target=$(terraform output target)
     username=$(terraform output username)
     password=$(terraform output password)
-    cat > $dot_cf_local_dir/config.json <<EOF
+    cat > $dot_forge_dir/config.json <<EOF
 {
     "target": "${target}",
     "username": "${username}",

@@ -1,15 +1,15 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/cf-local-ci
+image: docker:///cloudfoundry/forge-ci
 inputs:
-- name: cf-local-ci
+- name: forge-ci
 - name: terraform-image-changes
 - name: current-terraform-ami-version
 - name: next-terraform-ami-version
 - name: terraform-ami-commit
 - name: terraform-ami-metadata
 run:
-  path: cf-local-ci/tasks/build-terraform-images/run.sh
+  path: forge-ci/tasks/build-terraform-images/run.sh
 params:
   AWS_ACCESS_KEY_ID: some-aws-access-key-id
   AWS_SECRET_ACCESS_KEY: some-aws-secret-access-key

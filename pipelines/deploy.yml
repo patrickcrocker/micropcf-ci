@@ -1,26 +1,26 @@
 ---
 resources:
-  - name: cf-local-ci
+  - name: forge-ci
     type: git
     source:
-      uri: https://github.com/cloudfoundry-incubator/cf-local-ci.git
+      uri: https://github.com/cloudfoundry-incubator/forge-ci.git
       branch: master
-  - name: cf-local-website
+  - name: forge-website
     type: git
     source:
-      uri: git@github.com:pivotal-cf-experimental/cf-local-website
+      uri: git@github.com:pivotal-cf-experimental/forge-website
       branch: master
       private_key: {{github-ssh-key}}
-  - name: cf-local-ci-image-changes
+  - name: forge-ci-image-changes
     type: git
     source:
-      uri: https://github.com/cloudfoundry-incubator/cf-local-ci.git
+      uri: https://github.com/cloudfoundry-incubator/forge-ci.git
       branch: master
       paths: [Dockerfile]
-  - name: cf-local-ci-image
+  - name: forge-ci-image
     type: docker-image
     source:
-      repository: cloudfoundry/cf-local-ci
+      repository: cloudfoundry/forge-ci
       email: {{docker-hub-email}}
       username: {{docker-hub-username}}
       password: {{docker-hub-password}}
@@ -54,33 +54,33 @@ resources:
       deployment: concourse-vsphere
 
 jobs:
-  - name: deploy-cf-local-website
+  - name: deploy-forge-website
     plan:
     - aggregate:
-      - get: cf-local-ci
-      - get: cf-local-website
-    - task: deploy-cf-local-website
-      file: cf-local-ci/tasks/deploy-cf-local-website/task.yml
+      - get: forge-ci
+      - get: forge-website
+    - task: deploy-forge-website
+      file: forge-ci/tasks/deploy-forge-website/task.yml
       config:
         params:
           GITHUB_SSH_KEY: {{github-ssh-key}}
 
-  - name: docker-push-cf-local-ci
+  - name: docker-push-forge-ci
     plan:
-    - get: cf-local-ci
-      resource: cf-local-ci-image-changes
+    - get: forge-ci
+      resource: forge-ci-image-changes
       trigger: true
-    - put: cf-local-ci-image
+    - put: forge-ci-image
       params:
-        build: cf-local-ci
+        build: forge-ci
         push: true
 
   - name: apply-cloudformation
     serial_groups: [bosh]
     plan:
-    - get: cf-local-ci
+    - get: forge-ci
     - task: apply-cloudformation
-      file: cf-local-ci/tasks/apply-cloudformation/task.yml
+      file: forge-ci/tasks/apply-cloudformation/task.yml
       config:
         params:
           CLOUDFORMATION_STACK_NAME: concourse
@@ -92,10 +92,10 @@ jobs:
   - name: deploy-bosh
     serial_groups: [bosh]
     plan:
-    - get: cf-local-ci
+    - get: forge-ci
       passed: [apply-cloudformation]
     - task: deploy-bosh
-      file: cf-local-ci/tasks/deploy-bosh/task.yml
+      file: forge-ci/tasks/deploy-bosh/task.yml
       config:
         params:
           CLOUDFORMATION_STACK_NAME: concourse
@@ -107,7 +107,7 @@ jobs:
   - name: deploy-concourse
     serial_groups: [bosh]
     plan:
-    - get: cf-local-ci
+    - get: forge-ci
     - aggregate:
       - get: stemcell
       - get: concourse-release
@@ -116,7 +116,7 @@ jobs:
           - concourse-*.tgz
           - garden-linux-*.tgz
       - task: generate-concourse-manifest
-        file: cf-local-ci/tasks/generate-concourse-manifest/task.yml
+        file: forge-ci/tasks/generate-concourse-manifest/task.yml
         config:
           params:
             CONCOURSE_USERNAME: {{concourse-username}}
@@ -142,10 +142,10 @@ jobs:
   - name: deploy-vsphere-bosh
     serial_groups: [vsphere-bosh]
     plan:
-    - get: cf-local-ci
+    - get: forge-ci
     - task: deploy-vsphere-bosh
       tags: [vsphere-linux-worker]
-      file: cf-local-ci/tasks/deploy-vsphere-bosh/task.yml
+      file: forge-ci/tasks/deploy-vsphere-bosh/task.yml
       config:
         params:
           VCENTER_ADDRESS: {{vcenter-address}}
@@ -155,7 +155,7 @@ jobs:
   - name: deploy-vsphere-worker
     serial_groups: [vsphere-bosh]
     plan:
-    - get: cf-local-ci
+    - get: forge-ci
     - aggregate:
       - get: vsphere-stemcell
       - get: concourse-release
@@ -165,7 +165,7 @@ jobs:
           - garden-linux-*.tgz
       - task: generate-vsphere-worker-manifest
         tags: [vsphere-linux-worker]
-        file: cf-local-ci/tasks/generate-vsphere-worker-manifest/task.yml
+        file: forge-ci/tasks/generate-vsphere-worker-manifest/task.yml
         config:
           params:
             VSPHERE_WORKER_PRIVATE_KEY: {{vsphere-worker-private-key}}

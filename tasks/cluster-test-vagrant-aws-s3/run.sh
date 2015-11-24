@@ -2,13 +2,13 @@
 
 set -ex
 
-cf_local_target=`cat deploy-vagrant-aws/domain`
+forge_target=`cat deploy-vagrant-aws/domain`
 
-mkdir -p ~/.cf-local
+mkdir -p ~/.forge
 
-cat > ~/.cf-local/config.json <<EOF
+cat > ~/.forge/config.json <<EOF
 {
-  "target": "${cf_local_target}",
+  "target": "${forge_target}",
   "active_blob_store": 1,
   "s3_blob_store": {
     "region": "${AWS_REGION}",
@@ -19,6 +19,6 @@ cat > ~/.cf-local/config.json <<EOF
 }
 EOF
 
-curl -O "http://receptor.${cf_local_target}/v1/sync/linux/ltc"
+curl -O "http://receptor.${forge_target}/v1/sync/linux/ltc"
 chmod +x ltc
 ./ltc test -v -t 10m || ./ltc test -v -t 10m

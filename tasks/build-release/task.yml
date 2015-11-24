@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/cf-local-ci
+image: docker:///cloudfoundry/forge-ci
 inputs:
-- name: cf-local-ci
-- name: cf-local-release
+- name: forge-ci
+- name: forge-release
 run:
-  path: cf-local-ci/tasks/build-release/run.sh
+  path: forge-ci/tasks/build-release/run.sh
 params:
   AWS_ACCESS_KEY_ID: some-aws-access-key-id
   AWS_SECRET_ACCESS_KEY: some-aws-secret-access-key

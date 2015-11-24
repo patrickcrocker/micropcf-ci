@@ -2,8 +2,8 @@
 
 set -e
 
-unzip cf-local-bundle-ci/cf-local-bundle-v*.zip
-terraform_dir=$(echo $PWD/cf-local-bundle-v*/terraform/aws)
+unzip forge-bundle-ci/forge-bundle-v*.zip
+terraform_dir=$(echo $PWD/forge-bundle-v*/terraform/aws)
 
 echo "$AWS_SSH_PRIVATE_KEY" > $terraform_dir/key.pem
 
