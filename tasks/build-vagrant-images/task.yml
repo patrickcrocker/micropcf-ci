@@ -1,14 +1,14 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/forge-ci
+image: docker:///cloudfoundry/micropcf-ci
 inputs:
-- name: forge-ci
+- name: micropcf-ci
 - name: vagrant-image-changes
 - name: current-vagrant-box-version
 - name: next-vagrant-box-version
 - name: vagrant-box-commit
 run:
-  path: forge-ci/tasks/build-vagrant-images/run.sh
+  path: micropcf-ci/tasks/build-vagrant-images/run.sh
 params:
   ATLAS_TOKEN: some-atlas-token
   GITHUB_SSH_KEY: some-github-ssh-key

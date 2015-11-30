@@ -1,8 +1,8 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/forge-ci
+image: docker:///cloudfoundry/micropcf-ci
 inputs:
-- name: forge-ci
-- name: forge
+- name: micropcf-ci
+- name: micropcf
 run:
-  path: forge-ci/tasks/test-receptor/run.sh
+  path: micropcf-ci/tasks/test-receptor/run.sh

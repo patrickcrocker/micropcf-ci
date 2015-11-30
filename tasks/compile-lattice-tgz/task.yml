@@ -1,10 +1,10 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/forge-ci
+image: docker:///cloudfoundry/micropcf-ci
 inputs:
-- name: forge-ci
-- name: forge
-- name: forge-tgz-version
+- name: micropcf-ci
+- name: micropcf
+- name: micropcf-tgz-version
 run:
-  path: forge-ci/tasks/compile-forge-tgz/run.sh
+  path: micropcf-ci/tasks/compile-micropcf-tgz/run.sh
 

@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/forge-ci
+image: docker:///cloudfoundry/micropcf-ci
 inputs:
-- name: forge-ci
+- name: micropcf-ci
 - name: next-vagrant-box-version
 run:
-  path: forge-ci/tasks/cleanup-incomplete-build-vagrant/run.sh
+  path: micropcf-ci/tasks/cleanup-incomplete-build-vagrant/run.sh
 params:
   ATLAS_TOKEN: some-atlas-token
   PROVIDERS: some-providers

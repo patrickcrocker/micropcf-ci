@@ -2,5 +2,5 @@
 
 set -ex
 
-forge_tgz_version=$(cat forge-tgz-version/number)
-./forge/release/build "forge-v${forge_tgz_version}.tgz" "$forge_tgz_version"
+micropcf_tgz_version=$(cat micropcf-tgz-version/number)
+./micropcf/release/build "micropcf-v${micropcf_tgz_version}.tgz" "$micropcf_tgz_version"

@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/forge-ci
+image: docker:///cloudfoundry/micropcf-ci
 inputs:
-- name: forge-ci
+- name: micropcf-ci
 - name: deploy-terraform-aws
 run:
-  path: forge-ci/tasks/cluster-test-terraform-aws-s3/run.sh
+  path: micropcf-ci/tasks/cluster-test-terraform-aws-s3/run.sh
 params:
   AWS_ACCESS_KEY_ID: some-access-key-id
   AWS_SECRET_ACCESS_KEY: some-secret-access-key

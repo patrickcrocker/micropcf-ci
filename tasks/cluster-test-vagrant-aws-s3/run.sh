@@ -2,13 +2,13 @@
 
 set -ex
 
-forge_target=`cat deploy-vagrant-aws/domain`
+micropcf_target=`cat deploy-vagrant-aws/domain`
 
-mkdir -p ~/.forge
+mkdir -p ~/.micropcf
 
-cat > ~/.forge/config.json <<EOF
+cat > ~/.micropcf/config.json <<EOF
 {
-  "target": "${forge_target}",
+  "target": "${micropcf_target}",
   "active_blob_store": 1,
   "s3_blob_store": {
     "region": "${AWS_REGION}",
@@ -19,6 +19,6 @@ cat > ~/.forge/config.json <<EOF
 }
 EOF
 
-curl -O "http://receptor.${forge_target}/v1/sync/linux/ltc"
+curl -O "http://receptor.${micropcf_target}/v1/sync/linux/ltc"
 chmod +x ltc
 ./ltc test -v -t 10m || ./ltc test -v -t 10m

@@ -9,16 +9,16 @@ service = S3::Service.new(
   secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
 )
 
-S3_BUCKET = 'forge'
+S3_BUCKET = 'micropcf'
 
 objs_by_day = {}
 service.buckets.find(S3_BUCKET).objects.each do |obj|
-	next if !obj.key.start_with?('nightly/forge-bundle')
-	next if obj.key.start_with?('nightly/forge-bundle-latest-')
+	next if !obj.key.start_with?('nightly/micropcf-bundle')
+	next if obj.key.start_with?('nightly/micropcf-bundle-latest-')
 
 	arch = /-([^-]+)\.zip$/.match(obj.key)[1]
 	has_arch = ['osx', 'linux'].include?(arch)
-	regex = ( has_arch ? /forge-bundle-(.+?)-[^-]+\.zip$/ : /forge-bundle-(.+?)\.zip$/ )
+	regex = ( has_arch ? /micropcf-bundle-(.+?)-[^-]+\.zip$/ : /micropcf-bundle-(.+?)\.zip$/ )
 	version = regex.match(obj.key)[1]
 
 	objs_by_day[obj.last_modified.to_date] ||= {}

@@ -1,10 +1,10 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/forge-ci
+image: docker:///cloudfoundry/micropcf-ci
 inputs:
-- name: forge-ci
-- name: forge-website
+- name: micropcf-ci
+- name: micropcf-website
 run:
-  path: forge-ci/tasks/deploy-forge-website/run.sh
+  path: micropcf-ci/tasks/deploy-micropcf-website/run.sh
 params:
   GITHUB_SSH_KEY: some-ssh-key

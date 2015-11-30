@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Forge Nightly Builds</title>
+    <title>MicroPCF Nightly Builds</title>
     <style>
     .commasep { display: inline; list-style: none; padding: 0px; }
     .commasep li { display: inline; }
@@ -15,7 +15,7 @@
   <body>
     <div>
       <h2>Release Builds</h2>
-      <p>See <a href="https://github.com/cloudfoundry-incubator/forge/releases">GitHub</a>.
+      <p>See <a href="https://github.com/cloudfoundry-incubator/micropcf/releases">GitHub</a>.
     </div>
 
     <div>
@@ -24,7 +24,7 @@
       <h3><%= day.strftime('%b %d, %Y') %></h3>
       <% for ver in days[day].keys.sort.reverse %>
       <div class="artifact">
-        forge-bundle-<%= ver %>.zip (<ul class="commasep">
+        micropcf-bundle-<%= ver %>.zip (<ul class="commasep">
           <% for obj in days[day][ver] %>
           <li><a href="https://<%=s3bucket%>.s3.amazonaws.com/<%= obj[:path] %>"><%= obj[:arch] %></a></li>
           <% end %>

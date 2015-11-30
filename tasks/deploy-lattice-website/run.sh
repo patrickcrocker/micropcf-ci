@@ -9,7 +9,7 @@ export GIT_SSH_COMMAND="/usr/bin/ssh -i $PWD/github_private_key.pem"
 
 set -x
 
-pushd forge-website >/dev/null
+pushd micropcf-website >/dev/null
   bundle install
   apt-get install node -y --no-install-recommends
 

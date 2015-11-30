@@ -1,8 +1,8 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/forge-ci
+image: docker:///cloudfoundry/micropcf-ci
 inputs:
-- name: forge-ci
+- name: micropcf-ci
 - name: deploy-vagrant-aws
 run:
-  path: forge-ci/tasks/cluster-test-vagrant-aws-dav/run.sh
+  path: micropcf-ci/tasks/cluster-test-vagrant-aws-dav/run.sh

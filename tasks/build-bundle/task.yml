@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/forge-ci
+image: docker:///cloudfoundry/micropcf-ci
 inputs:
-- name: forge-ci
-- name: forge
-- name: forge-tgz
+- name: micropcf-ci
+- name: micropcf
+- name: micropcf-tgz
 - name: vagrant-box-version
 - name: terraform-ami-metadata
 run:
-  path: forge-ci/tasks/build-bundle/run.sh
+  path: micropcf-ci/tasks/build-bundle/run.sh

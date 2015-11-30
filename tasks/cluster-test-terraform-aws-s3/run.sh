@@ -2,16 +2,16 @@
 
 set -ex
 
-dot_forge_dir=$HOME/.forge
-terraform_dir=$PWD/deploy-terraform-aws/forge-bundle-v*/terraform/aws
+dot_micropcf_dir=$HOME/.micropcf
+terraform_dir=$PWD/deploy-terraform-aws/micropcf-bundle-v*/terraform/aws
 
-mkdir -p $dot_forge_dir
+mkdir -p $dot_micropcf_dir
 
 pushd $terraform_dir >/dev/null
     target=$(terraform output target)
     username=$(terraform output username)
     password=$(terraform output password)
-    cat > $dot_forge_dir/config.json <<EOF
+    cat > $dot_micropcf_dir/config.json <<EOF
 {
     "target": "${target}",
     "username": "${username}",

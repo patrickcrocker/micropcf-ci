@@ -1,10 +1,10 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/forge-ci
+image: docker:///cloudfoundry/micropcf-ci
 inputs:
-- name: forge-ci
+- name: micropcf-ci
 run:
-  path: forge-ci/tasks/generate-concourse-manifest/run.sh
+  path: micropcf-ci/tasks/generate-concourse-manifest/run.sh
 params:
   CONCOURSE_USERNAME: some-concourse-username
   CONCOURSE_PASSWORD: some-concourse-password

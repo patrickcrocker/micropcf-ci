@@ -1,10 +1,10 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/forge-ci
+image: docker:///cloudfoundry/micropcf-ci
 inputs:
-- name: forge-ci
+- name: micropcf-ci
 run:
-  path: forge-ci/tasks/generate-vsphere-worker-manifest/run.sh
+  path: micropcf-ci/tasks/generate-vsphere-worker-manifest/run.sh
 params:
   VSPHERE_WORKER_PRIVATE_KEY: some-vsphere-worker-private-key
   CONCOURSE_TSA_PUBLIC_KEY: some-concourse-tsa-public-key
