@@ -3,7 +3,7 @@ platform: linux
 image: docker:///cloudfoundry/forge-ci
 inputs:
 - name: forge-ci
-- name: forge-release
+- name: forge
 run:
   path: forge-ci/tasks/build-release/run.sh
 params:

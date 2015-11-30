@@ -2,7 +2,7 @@
 
 set -ex
 
-pushd forge-release >/dev/null
+pushd forge >/dev/null
   test -z "$(gofmt -d -e src/$PACKAGE | tee >(cat >&2))"
 popd >/dev/null
 

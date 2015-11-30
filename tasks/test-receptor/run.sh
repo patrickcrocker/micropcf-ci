@@ -2,7 +2,7 @@
 
 set -ex
 
-pushd forge-release >/dev/null
+pushd forge >/dev/null
   source .envrc
   go install github.com/onsi/ginkgo/ginkgo
   go install github.com/coreos/etcd

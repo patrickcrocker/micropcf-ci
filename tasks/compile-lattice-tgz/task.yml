@@ -3,7 +3,7 @@ platform: linux
 image: docker:///cloudfoundry/forge-ci
 inputs:
 - name: forge-ci
-- name: forge-release
+- name: forge
 - name: forge-tgz-version
 run:
   path: forge-ci/tasks/compile-forge-tgz/run.sh

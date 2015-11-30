@@ -2,34 +2,33 @@ resources:
   - name: forge-ci
     type: git
     source:
-      uri: https://github.com/cloudfoundry-incubator/forge-ci.git
+      uri: https://github.com/sclevine/forge-ci.git
       branch: master
-  - name: forge-release
+  - name: forge
     type: git
     source:
-      uri: git@github.com:cloudfoundry-incubator/forge-release.git
+      uri: git@github.com:sclevine/forge.git
       branch: master
       private_key: {{github-ssh-key}}
-  - name: vagrant-image-changes
+  - name: image-changes
     type: git
     source:
-      uri: git@github.com:cloudfoundry-incubator/forge-release.git
+      uri: git@github.com:sclevine/forge.git
       branch: master
       private_key: {{github-ssh-key}}
-      ignore_paths: [vagrant/Vagrantfile]
       paths:
-      - vagrant
+      - images
       - bosh
       - diego-release
       - garden-linux-release
       - cf-routing-release
       - cf-release
-      - cf-forge-release
+      - cf-forge
       - etcd-release
   - name: terraform-image-changes
     type: git
     source:
-      uri: git@github.com:cloudfoundry-incubator/forge-release.git
+      uri: git@github.com:cloudfoundry-incubator/forge.git
       branch: master
       private_key: {{github-ssh-key}}
       ignore_paths: [terraform/aws]
@@ -40,7 +39,7 @@ resources:
       - garden-linux-release
       - cf-routing-release
       - cf-release
-      - cf-forge-release
+      - cf-forge
       - etcd-release
 
   - name: vagrant-box-version
@@ -138,7 +137,7 @@ resources:
     type: github-release
     source:
       user: cloudfoundry-incubator
-      repository: forge-release
+      repository: forge
       access_token: {{github-api-token}}
       drafts: true
 
@@ -160,7 +159,7 @@ jobs:
     plan:
     - aggregate:
       - get: forge-ci
-      - get: forge-release
+      - get: forge
         trigger: true
         params:
           submodules: none
@@ -237,7 +236,7 @@ jobs:
     plan:
     - aggregate:
       - get: forge-ci
-      - get: forge-release
+      - get: forge
         trigger: true
         passed: [build-images]
       - get: vagrant-box-version
@@ -254,7 +253,7 @@ jobs:
     plan:
     - aggregate:
       - get: forge-ci
-      - get: forge-release
+      - get: forge
         trigger: true
         passed: [build-images]
       - get: vagrant-box-version
@@ -268,7 +267,7 @@ jobs:
     plan:
     - aggregate:
       - get: forge-ci
-      - get: forge-release
+      - get: forge
         trigger: true
         passed: [build-images]
         params:
@@ -287,7 +286,7 @@ jobs:
     plan:
     - aggregate:
       - get: forge-ci
-      - get: forge-release
+      - get: forge
         trigger: true
         passed:
         - unit-test-ltc
@@ -318,7 +317,7 @@ jobs:
     plan:
     - aggregate:
       - get: forge-ci
-      - get: forge-release
+      - get: forge
         trigger: true
         passed: [compile-forge-tgz]
         params:
@@ -340,7 +339,7 @@ jobs:
     plan:
     - aggregate:
       - get: forge-ci
-      - get: forge-release
+      - get: forge
         trigger: true
         passed: [build-bundle]
         params:
@@ -383,7 +382,7 @@ jobs:
     plan:
     - aggregate:
       - get: forge-ci
-      - get: forge-release
+      - get: forge
         trigger: true
         passed: [build-bundle]
         params:
@@ -418,7 +417,7 @@ jobs:
 
   - name: publish-acceptance
     plan:
-    - get: forge-release
+    - get: forge
       trigger: true
       passed:
       - cluster-test-vagrant-aws
@@ -436,7 +435,7 @@ jobs:
     - put: forge-tracker
       params:
         comment: forge-bundle-acceptance/url
-        repos: [forge-release]
+        repos: [forge]
 
   - name: publish-nightly
     plan:
@@ -462,7 +461,7 @@ jobs:
     plan:
     - aggregate:
       - get: forge-ci
-      - get: forge-release
+      - get: forge
         params:
           submodules: none
     - task: build-release

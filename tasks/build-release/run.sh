@@ -2,7 +2,7 @@
 
 set -ex
 
-release_version=$(git -C forge-release describe --abbrev=0)
+release_version=$(git -C forge describe --abbrev=0)
 bundle_sha=$(git rev-parse --short "$release_version^{commit}")
 
 echo -n "$release_version" > release-tag
