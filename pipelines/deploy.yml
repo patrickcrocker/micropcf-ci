@@ -3,21 +3,21 @@ resources:
   - name: micropcf-ci
     type: git
     source:
-      uri: https://github.com/cloudfoundry-incubator/micropcf-ci.git
+      uri: https://github.com/sclevine/micropcf-ci.git
       branch: master
   - name: micropcf-website
     type: git
     source:
-      uri: git@github.com:pivotal-cf-experimental/micropcf-website
+      uri: git@github.com:pivotal-cf/micropcf-website
       branch: master
       private_key: {{github-ssh-key}}
-  - name: micropcf-ci-image-changes
+  - name: ci-image-changes
     type: git
     source:
-      uri: https://github.com/cloudfoundry-incubator/micropcf-ci.git
+      uri: https://github.com/sclevine/micropcf-ci.git
       branch: master
       paths: [Dockerfile]
-  - name: micropcf-ci-image
+  - name: ci-image
     type: docker-image
     source:
       repository: micropcf/ci
@@ -65,12 +65,12 @@ jobs:
         params:
           GITHUB_SSH_KEY: {{github-ssh-key}}
 
-  - name: docker-push-micropcf-ci
+  - name: docker-push-ci-image
     plan:
     - get: micropcf-ci
-      resource: micropcf-ci-image-changes
+      resource: ci-image-changes
       trigger: true
-    - put: micropcf-ci-image
+    - put: ci-image
       params:
         build: micropcf-ci
         push: true
