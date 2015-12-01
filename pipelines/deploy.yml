@@ -20,7 +20,7 @@ resources:
   - name: micropcf-ci-image
     type: docker-image
     source:
-      repository: cloudfoundry/micropcf-ci
+      repository: micropcf/ci
       email: {{docker-hub-email}}
       username: {{docker-hub-username}}
       password: {{docker-hub-password}}

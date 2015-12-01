@@ -1,6 +1,6 @@
 ---
 platform: linux
-image: docker:///cloudfoundry/micropcf-ci
+image: docker:///micropcf/ci
 inputs:
 - name: micropcf-ci
 - name: micropcf-website
