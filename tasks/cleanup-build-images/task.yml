@@ -1,0 +1,12 @@
+---
+platform: linux
+image: docker:///cloudfoundry/micropcf-ci
+inputs:
+- name: micropcf-ci
+- name: next-base-box-version
+run:
+  path: micropcf-ci/tasks/cleanup-build-images/run.sh
+params:
+  DISTRO: some-distro
+  ATLAS_TOKEN: some-atlas-token
+  PROVIDERS: some-providers

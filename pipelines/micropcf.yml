@@ -1,0 +1,260 @@
+resources:
+  - name: micropcf-ci
+    type: git
+    source:
+      uri: https://github.com/sclevine/micropcf-ci.git
+      branch: master
+  - name: micropcf
+    type: git
+    source:
+      uri: git@github.com:sclevine/micropcf.git
+      branch: master
+      private_key: {{github-ssh-key}}
+  - name: base-image-changes
+    type: git
+    source:
+      uri: git@github.com:sclevine/micropcf.git
+      branch: master
+      private_key: {{github-ssh-key}}
+      ignore_paths:
+      - images/solo
+      - images/developer
+      paths: [images]
+
+  - name: base-box-version
+    type: semver
+    source:
+      bucket: micropcf
+      key: /ci/base-box-version
+      access_key_id: {{aws-access-key-id}}
+      secret_access_key: {{aws-secret-access-key}}
+  - name: base-box-commit
+    type: s3
+    source:
+      bucket: micropcf
+      versioned_file: /ci/base-box-commit
+      access_key_id: {{aws-access-key-id}}
+      secret_access_key: {{aws-secret-access-key}}
+
+  - name: base-vagrantfile-ci
+    type: s3
+    source:
+      bucket: micropcf
+      regexp: /ci/Vagrantfile-v(.*)[.]base
+      access_key_id: {{aws-access-key-id}}
+      secret_access_key: {{aws-secret-access-key}}
+  - name: base-vagrantfile-acceptance
+    type: s3
+    source:
+      bucket: micropcf
+      regexp: /acceptance/Vagrantfile-v(.*)[.]base
+      access_key_id: {{aws-access-key-id}}
+      secret_access_key: {{aws-secret-access-key}}
+  - name: base-vagrantfile-nightly
+    type: s3
+    source:
+      bucket: micropcf
+      regexp: /nightly/Vagrantfile-v(.*)[.]base
+      access_key_id: {{aws-access-key-id}}
+      secret_access_key: {{aws-secret-access-key}}
+  - name: base-vagrantfile-release
+    type: s3
+    source:
+      bucket: micropcf
+      regexp: /releases/Vagrantfile-v(.*)[.]base
+      access_key_id: {{aws-access-key-id}}
+      secret_access_key: {{aws-secret-access-key}}
+
+  - name: github-release
+    type: github-release
+    source:
+      user: cloudfoundry-incubator
+      repository: micropcf
+      access_token: {{github-api-token}}
+      drafts: true
+
+  - name: micropcf-tracker
+    type: tracker
+    source:
+      token: {{tracker-api-token}}
+      project_id: "1485598"
+  - name: publish-nightly-timer
+    type: time
+    source:
+      start: 18:00 -0500
+      stop: 19:00 -0500
+      interval: 1h
+
+jobs:
+  - name: build-images
+    serial: true
+    plan:
+    - aggregate:
+      - get: micropcf-ci
+      - get: micropcf
+        trigger: true
+        params:
+          submodules: none
+      - get: base-image-changes
+        params:
+          submodules: none
+      - get: base-box-commit
+      - get: current-base-box-version
+        resource: base-box-version
+      - get: next-base-box-version
+        resource: base-box-version
+        params:
+          bump: minor
+    - aggregate:
+      - do:
+        - task: build-base-images
+          tags: [vsphere-linux-worker]
+          file: micropcf-ci/tasks/build-images/task.yml
+          config:
+            params:
+              GITHUB_SSH_KEY: {{github-ssh-key}}
+              AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+              AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+              REMOTE_EXECUTOR_PRIVATE_KEY: {{remote-executor-private-key}}
+              REMOTE_EXECUTOR_ADDRESS: {{remote-executor-address}}
+              ATLAS_TOKEN: {{atlas-api-token}}
+              DISTRO: base
+              NAMES: amazon-ebs,virtualbox-iso,vmware-iso
+        - put: base-box-commit
+          params:
+            file: build-base-images/box-commit
+        - put: base-box-version
+          params:
+            file: build-base-images/box-version-number
+        ensure:
+          task: cleanup-build-base-images
+          file: micropcf-ci/tasks/cleanup-build-images/task.yml
+          config:
+            params:
+              DISTRO: base
+              ATLAS_TOKEN: {{atlas-api-token}}
+              PROVIDERS: aws,virtualbox,vmware_desktop
+      # - do:
+        # - task: build-solo-images
+        # etc.
+
+  - name: generate-vagrantfiles
+    plan:
+    - aggregate:
+      - get: micropcf-ci
+      - get: micropcf
+        trigger: true
+        passed: [build-images]
+        params:
+          submodules: none
+      - get: base-box-version
+        passed: [build-images]
+    - task: generate-base-vagrantfile
+      file: micropcf-ci/tasks/generate-vagrantfile/task.yml
+      config:
+        params:
+          DISTRO: base
+    - put: base-vagrantfile-ci
+      params:
+        from: generate-base-vagrantfile/Vagrantfile-v(.*)[.]base
+        to: /ci/
+
+  - name: cats-base-aws
+    plan:
+    - aggregate:
+      - get: micropcf-ci
+      - get: micropcf
+        trigger: true
+        passed: [generate-vagrantfiles]
+        params:
+          submodules: none
+      - get: vagrantfile-ci
+        resource: base-vagrantfile-ci
+        passed: [generate-vagrantfiles]
+    - do:
+      - task: deploy
+        file: micropcf-ci/tasks/deploy-aws/task.yml
+        config:
+          params:
+            AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+            AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+            AWS_SSH_PRIVATE_KEY: {{aws-ssh-private-key}}
+            AWS_SSH_PRIVATE_KEY_NAME: {{aws-ssh-private-key-name}}
+            VAGRANTFILE_PATH: vagrantfile-ci/Vagrantfile-v*.base
+      ensure:
+        task: cleanup-deploy
+        file: micropcf-ci/tasks/cleanup-deploy/task.yml
+        config:
+          params:
+            AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+            AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+            AWS_SSH_PRIVATE_KEY: {{aws-ssh-private-key}}
+            AWS_SSH_PRIVATE_KEY_NAME: {{aws-ssh-private-key-name}}
+
+  - name: publish-acceptance
+    plan:
+    - get: micropcf
+      trigger: true
+      passed:
+      - cats-base-aws
+      params:
+        submodules: none
+    - get: base-vagrantfile-ci
+      passed:
+      - cats-base-aws
+    - put: base-vagrantfile-acceptance
+      params:
+        from: base-vagrantfile-ci/Vagrantfile-v(.*)[.]base
+        to: /acceptance/
+    - put: micropcf-tracker
+      params:
+        comment: base-vagrantfile-acceptance/url
+        repos: [micropcf]
+
+  - name: publish-nightly
+    plan:
+    - get: micropcf-ci
+    - get: publish-nightly-timer
+      trigger: true
+    - get: base-vagrantfile-ci
+      passed:
+      - cats-base-aws
+    - put: base-vagrantfile-nightly
+      params:
+        from: base-vagrantfile-ci/Vagrantfile-v(.*)[.]base
+        to: /nightly/
+    - task: generate-vagrantfile-listing
+      file: micropcf-ci/tasks/generate-vagrantfile-listing/task.yml
+      config:
+        params:
+          AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+          AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+
+  - name: publish-release
+    plan:
+    - aggregate:
+      - get: micropcf-ci
+      - get: micropcf
+        params:
+          submodules: none
+    - task: build-release
+      file: micropcf-ci/tasks/build-release/task.yml
+      config:
+        params:
+          S3_BUCKET_NAME: micropcf
+          AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+          AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+    - aggregate:
+      - put: base-vagrantfile-release
+        params:
+          from: build-release/Vagrantfile-v(.*)[.]base
+          to: /releases/
+      - put: base-vagrantfile-release
+        params:
+          from: build-release/Vagrantfile-v(.*)[.]base
+          to: /releases/Vagrantfile-latest.base
+    - put: github-release
+      params:
+        name: build-release/release-tag
+        tag: build-release/release-tag
+        globs: [build-release/Vagrantfile-*]

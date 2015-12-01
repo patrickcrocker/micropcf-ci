@@ -5,7 +5,6 @@ ENV PATH /usr/local/go/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bi
 ENV GOROOT /usr/local/go
 ENV GO_VERSION 1.5.1
 ENV VAGRANT_VERSION 1.7.4
-ENV TERRAFORM_VERSION 0.6.6
 ENV PACKER_VERSION 0.8.6
 ENV BOSH_INIT_VERSION 0.0.77
 
@@ -32,12 +31,6 @@ RUN \
   vagrant plugin install vagrant-aws
 
 RUN \
-  wget --quiet "https://dl.bintray.com/mitchellh/terraform/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" && \
-  unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/terraform && \
-  rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-  cd /usr/local/bin && ln -s /usr/local/terraform/* .
-
-RUN \
   wget --quiet "https://dl.bintray.com/mitchellh/packer/packer_${PACKER_VERSION}_linux_amd64.zip" && \
   unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /usr/local/packer && \
   rm -f packer_${PACKER_VERSION}_linux_amd64.zip && \
@@ -56,5 +49,5 @@ RUN \
 RUN \
   mkdir -p $HOME/.ssh && \
   ssh-keyscan github.com >> $HOME/.ssh/known_hosts && \
-  git config --global user.email "pivotal-lattice-eng@pivotal.io" && \
+  git config --global user.email "micropcf-eng@pivotal.io" && \
   git config --global user.name "Concourse CI"

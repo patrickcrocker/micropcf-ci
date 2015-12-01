@@ -1,0 +1,11 @@
+---
+platform: linux
+image: docker:///cloudfoundry/micropcf-ci
+inputs:
+- name: micropcf-ci
+- name: micropcf
+- name: base-box-version
+run:
+  path: micropcf-ci/tasks/generate-vagrantfile/run.sh
+params:
+  DISTRO: some-distro

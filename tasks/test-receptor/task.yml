@@ -1,8 +1,0 @@
----
-platform: linux
-image: docker:///cloudfoundry/micropcf-ci
-inputs:
-- name: micropcf-ci
-- name: micropcf
-run:
-  path: micropcf-ci/tasks/test-receptor/run.sh

@@ -1,0 +1,20 @@
+---
+platform: linux
+image: docker:///cloudfoundry/micropcf-ci
+inputs:
+- name: micropcf-ci
+- name: base-image-changes
+- name: current-base-box-version
+- name: next-base-box-version
+- name: base-box-commit
+run:
+  path: micropcf-ci/tasks/build-images/run.sh
+params:
+  ATLAS_TOKEN: some-atlas-token
+  GITHUB_SSH_KEY: some-github-ssh-key
+  REMOTE_EXECUTOR_PRIVATE_KEY: some-remote-executor-private-key
+  REMOTE_EXECUTOR_ADDRESS: some-remote-executor-address
+  AWS_ACCESS_KEY_ID: some-aws-access-key-id
+  AWS_SECRET_ACCESS_KEY: some-aws-secret-access-key
+  DISTRO: some-distro
+  NAMES: some-names
