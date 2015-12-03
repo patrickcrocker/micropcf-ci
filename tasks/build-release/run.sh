@@ -3,7 +3,7 @@
 set -ex
 
 release_version=$(git -C micropcf describe --abbrev=0)
-vagrantfile_sha=$(git rev-parse --short "$release_version^{commit}")
+vagrantfile_sha=$(git -C micropcf rev-parse --short "$release_version^{commit}")
 
 echo -n "$release_version" > release-tag
 
