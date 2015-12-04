@@ -119,7 +119,7 @@ jobs:
               NAMES: amazon-ebs,virtualbox-iso,vmware-iso
         - put: base-box-commit
           params:
-            file: build-base-images/box-commit
+            from: build-base-images/box-commit
         - put: base-box-version
           params:
             file: build-base-images/box-version-number
