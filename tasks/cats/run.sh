@@ -19,8 +19,8 @@ cat <<EOF >config.json
 EOF
 export CONFIG=$PWD/config.json
 
-git -C micropcf submodule update --init micropcf/images/releases/cf-release
-git -C micropcf/images/releases/cf-release submodule update --init micropcf/images/releases/cf-release/src/github.com/cloudfoundry/cf-acceptance-tests
+git -C micropcf submodule update --init images/releases/cf-release
+git -C micropcf/images/releases/cf-release submodule update --init src/github.com/cloudfoundry/cf-acceptance-tests
 
 pushd micropcf/images/releases/cf-release/src/github.com/cloudfoundry/cf-acceptance-tests >/dev/null
   export GOPATH=$PWD/Godeps/_workspace:$PWD/../../../..
