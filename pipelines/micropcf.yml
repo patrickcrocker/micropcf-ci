@@ -16,23 +16,20 @@ resources:
       uri: git@github.com:sclevine/micropcf.git
       branch: master
       private_key: {{github-ssh-key}}
-      ignore_paths:
-      - images/solo
-      - images/developer
       paths: [images]
 
   - name: base-box-version
     type: semver
     source:
       bucket: micropcf
-      key: /ci/base-box-version
+      key: ci/base-box-version
       access_key_id: {{aws-access-key-id}}
       secret_access_key: {{aws-secret-access-key}}
   - name: base-box-commit
     type: s3
     source:
       bucket: micropcf
-      versioned_file: /ci/base-box-commit
+      versioned_file: ci/base-box-commit
       access_key_id: {{aws-access-key-id}}
       secret_access_key: {{aws-secret-access-key}}
 
@@ -40,7 +37,7 @@ resources:
     type: s3
     source:
       bucket: micropcf
-      regexp: /ci/Vagrantfile-v(.*)[.]base
+      regexp: ci/Vagrantfile-v(.*)[.]base
       access_key_id: {{aws-access-key-id}}
       secret_access_key: {{aws-secret-access-key}}
   - name: base-vagrantfile-acceptance
@@ -181,6 +178,8 @@ jobs:
             AWS_SSH_PRIVATE_KEY: {{aws-ssh-private-key}}
             AWS_SSH_PRIVATE_KEY_NAME: {{aws-ssh-private-key-name}}
             VAGRANTFILE_PATH: vagrantfile-ci/Vagrantfile-v*.base
+      - task: cats
+        file: micropcf-ci/tasks/cats/task.yml
       ensure:
         task: cleanup-deploy
         file: micropcf-ci/tasks/cleanup-deploy/task.yml

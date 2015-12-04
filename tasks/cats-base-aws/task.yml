@@ -1,8 +1,0 @@
----
-platform: linux
-image: docker:///micropcf/ci
-inputs:
-- name: micropcf-ci
-- name: deploy-vagrant-aws
-run:
-  path: micropcf-ci/tasks/cluster-test-vagrant-aws-dav/run.sh

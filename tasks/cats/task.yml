@@ -1,0 +1,9 @@
+---
+platform: linux
+image: docker:///micropcf/ci
+inputs:
+- name: micropcf-ci
+- name: micropcf
+- name: deploy
+run:
+  path: micropcf-ci/tasks/cats/run.sh
