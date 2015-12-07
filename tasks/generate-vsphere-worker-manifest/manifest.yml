@@ -58,7 +58,7 @@ jobs:
       baggageclaim:
         forward_address: 127.0.0.1:7788
       tsa:
-        host: ci.micropcf.cf
+        host: ci.micropcf.io
         host_public_key: TSA-PUBLIC-KEY
         private_key: WORKER-PRIVATE-KEY
 
