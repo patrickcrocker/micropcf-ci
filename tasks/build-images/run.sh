@@ -8,21 +8,26 @@ eval $(ssh-agent)
 ssh-add github_private_key.pem > /dev/null
 rm github_private_key.pem
 
-echo "$REMOTE_EXECUTOR_PRIVATE_KEY" > remote_executor.pem
-chmod 0600 remote_executor.pem
-
 set -x
 
 current_version=$(cat "current-$DISTRO-box-version/number")
+echo "current_version: " + $current_version
 next_version=$(cat "next-$DISTRO-box-version/number")
+echo "next_version: " + $next_version
 current_box_commit=$(cat "$DISTRO-box-commit/base-box-commit")
+echo "current_box_commit: " + $current_box_commit
 next_box_commit=$(git -C "$DISTRO-image-changes" rev-parse -q --verify HEAD)
+echo "next_box_commit: " + $next_box_commit
 
 if [[ $current_box_commit == $next_box_commit ]]; then
+  echo "$current_box_commit == $next_box_commit"
   echo -n $current_box_commit > box-commit
   echo -n $current_version > box-version-number
   exit 0
 fi
+
+echo "$current_box_commit != $next_box_commit"
+exit 0
 
 git -C "$DISTRO-image-changes" submodule update --init --recursive
 
