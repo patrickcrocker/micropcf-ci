@@ -190,17 +190,53 @@ jobs:
             AWS_SSH_PRIVATE_KEY: {{aws-ssh-private-key}}
             AWS_SSH_PRIVATE_KEY_NAME: {{aws-ssh-private-key-name}}
 
+  - name: dats-base-aws
+    plan:
+    - aggregate:
+      - get: micropcf-ci
+      - get: micropcf
+        trigger: true
+        passed: [generate-vagrantfiles]
+        params:
+          submodules: none
+      - get: vagrantfile-ci
+        resource: base-vagrantfile-ci
+        passed: [generate-vagrantfiles]
+    - do:
+      - task: deploy
+        file: micropcf-ci/tasks/deploy-aws/task.yml
+        config:
+          params:
+            AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+            AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+            AWS_SSH_PRIVATE_KEY: {{aws-ssh-private-key}}
+            AWS_SSH_PRIVATE_KEY_NAME: {{aws-ssh-private-key-name}}
+            VAGRANTFILE_PATH: vagrantfile-ci/Vagrantfile-v*.base
+      - task: dats
+        file: micropcf-ci/tasks/dats/task.yml
+      ensure:
+        task: cleanup-deploy
+        file: micropcf-ci/tasks/cleanup-deploy/task.yml
+        config:
+          params:
+            AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+            AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+            AWS_SSH_PRIVATE_KEY: {{aws-ssh-private-key}}
+            AWS_SSH_PRIVATE_KEY_NAME: {{aws-ssh-private-key-name}}
+
   - name: publish-acceptance
     plan:
     - get: micropcf
       trigger: true
       passed:
       - cats-base-aws
+      - dats-base-aws
       params:
         submodules: none
     - get: base-vagrantfile-ci
       passed:
       - cats-base-aws
+      - dats-base-aws
     - put: base-vagrantfile-acceptance
       params:
         from: base-vagrantfile-ci/Vagrantfile-v(.*)[.]base
@@ -218,6 +254,7 @@ jobs:
     - get: base-vagrantfile-ci
       passed:
       - cats-base-aws
+      - dats-base-aws
     - put: base-vagrantfile-nightly
       params:
         from: base-vagrantfile-ci/Vagrantfile-v(.*)[.]base
