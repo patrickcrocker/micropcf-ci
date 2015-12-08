@@ -19,7 +19,7 @@ echo "current_box_commit: " + $current_box_commit
 next_box_commit=$(git -C "$DISTRO-image-changes" rev-parse -q --verify HEAD)
 echo "next_box_commit: " + $next_box_commit
 
-sleep 60
+sleep 6000
 
 if [[ $current_box_commit == $next_box_commit ]]; then
   echo "$current_box_commit == $next_box_commit"
