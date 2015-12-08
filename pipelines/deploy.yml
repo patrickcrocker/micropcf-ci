@@ -3,7 +3,7 @@ resources:
   - name: micropcf-ci
     type: git
     source:
-      uri: https://github.com/sclevine/micropcf-ci.git
+      uri: https://github.com/pivotal-cf/micropcf-ci.git
       branch: master
   - name: micropcf-website
     type: git
@@ -14,7 +14,7 @@ resources:
   - name: ci-image-changes
     type: git
     source:
-      uri: https://github.com/sclevine/micropcf-ci.git
+      uri: https://github.com/pivotal-cf/micropcf-ci.git
       branch: master
       paths: [Dockerfile]
   - name: ci-image

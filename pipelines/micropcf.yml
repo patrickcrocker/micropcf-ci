@@ -2,18 +2,18 @@ resources:
   - name: micropcf-ci
     type: git
     source:
-      uri: https://github.com/sclevine/micropcf-ci.git
+      uri: https://github.com/pivotal-cf/micropcf-ci.git
       branch: master
   - name: micropcf
     type: git
     source:
-      uri: git@github.com:sclevine/micropcf.git
+      uri: git@github.com:pivotal-cf/micropcf.git
       branch: master
       private_key: {{github-ssh-key}}
   - name: base-image-changes
     type: git
     source:
-      uri: git@github.com:sclevine/micropcf.git
+      uri: git@github.com:pivotal-cf/micropcf.git
       branch: master
       private_key: {{github-ssh-key}}
       paths: [images]
@@ -65,7 +65,7 @@ resources:
   - name: github-release
     type: github-release
     source:
-      user: cloudfoundry-incubator
+      user: pivotal-cf
       repository: micropcf
       access_token: {{github-api-token}}
       drafts: true
