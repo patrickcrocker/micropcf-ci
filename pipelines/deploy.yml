@@ -22,7 +22,7 @@ resources:
     source:
       bucket: micropcf-private
       private: true
-      versioned_file: vsphere-bosh/bosh-state.yml
+      versioned_file: vsphere-bosh/bosh-state.json
       access_key_id: {{aws-access-key-id}}
       secret_access_key: {{aws-secret-access-key}}
   - name: ci-image
