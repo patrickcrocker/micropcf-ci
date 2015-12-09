@@ -10,6 +10,14 @@ resources:
       uri: git@github.com:pivotal-cf/micropcf.git
       branch: master
       private_key: {{github-ssh-key}}
+  - name: base-image-changes
+    type: git
+    source:
+      uri: git@github.com:pivotal-cf/micropcf.git
+      branch: master
+      private_key: {{github-ssh-key}}
+      paths: [images]
+      ignore_paths: [images/micropcf]
 
   - name: base-box-version
     type: semver
@@ -23,6 +31,13 @@ resources:
     source:
       bucket: micropcf
       versioned_file: ci/base-box-commit
+      access_key_id: {{aws-access-key-id}}
+      secret_access_key: {{aws-secret-access-key}}
+  - name: base-dev-image
+    type: s3
+    source:
+      bucket: micropcf
+      versioned_file: dev/base.box
       access_key_id: {{aws-access-key-id}}
       secret_access_key: {{aws-secret-access-key}}
 
@@ -107,6 +122,7 @@ jobs:
               ATLAS_TOKEN: {{atlas-api-token}}
               DISTRO: base
               NAMES: amazon-ebs,virtualbox-iso,vmware-iso
+              IGNORE_PATHS: '["images/micropcf"]'
         - put: base-box-commit
           params:
             from: build-base-images/box-commit
@@ -121,9 +137,27 @@ jobs:
               DISTRO: base
               ATLAS_TOKEN: {{atlas-api-token}}
               PROVIDERS: aws,virtualbox,vmware_desktop
-      # - do:
-        # - task: build-solo-images
-        # etc.
+
+  - name: build-dev-images
+    serial: true
+    plan:
+    - aggregate:
+      - get: micropcf-ci
+      - get: image-changes
+        resource: base-image-changes
+        trigger: true
+    - task: build-base-dev-image
+      tags: [vsphere-linux-worker]
+      file: micropcf-ci/tasks/build-dev-image/task.yml
+      config:
+        params:
+          REMOTE_EXECUTOR_PRIVATE_KEY: {{remote-executor-private-key}}
+          REMOTE_EXECUTOR_ADDRESS: {{remote-executor-address}}
+          DISTRO: base
+    - put: base-dev-image
+      params:
+        from: build-base-dev-image/base.box
+        to: /dev/
 
   - name: generate-vagrantfiles
     plan:

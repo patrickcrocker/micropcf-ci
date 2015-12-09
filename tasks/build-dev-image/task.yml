@@ -1,0 +1,12 @@
+---
+platform: linux
+image: docker:///micropcf/ci
+inputs:
+  - name: micropcf-ci
+  - name: image-changes
+run:
+  path: micropcf-ci/tasks/build-dev-image/run.sh
+params:
+  REMOTE_EXECUTOR_PRIVATE_KEY: some-remote-executor-private-key
+  REMOTE_EXECUTOR_ADDRESS: some-remote-executor-address
+  DISTRO: some-distro
