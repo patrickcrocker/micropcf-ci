@@ -7,4 +7,4 @@ git -C micropcf/images/releases/diego-release submodule update --init src/github
 
 private_ip=$(vagrant ssh -c "ip route get 1 | awk '{print \$NF;exit}'" 2>/dev/null | tr -d '\r')
 
-./micropcf/scripts/dats "$(cat deploy/domain)" "$private_ip"
+./micropcf/bin/dats "$(cat deploy/domain)" "$private_ip"
