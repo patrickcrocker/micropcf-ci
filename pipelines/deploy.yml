@@ -17,6 +17,14 @@ resources:
       uri: https://github.com/pivotal-cf/micropcf-ci.git
       branch: master
       paths: [Dockerfile]
+  - name: vsphere-bosh-state
+    type: s3
+    source:
+      bucket: micropcf-private
+      private: true
+      versioned_file: vsphere-bosh/bosh-state.yml
+      access_key_id: {{aws-access-key-id}}
+      secret_access_key: {{aws-secret-access-key}}
   - name: ci-image
     type: docker-image
     source:
@@ -142,7 +150,9 @@ jobs:
   - name: deploy-vsphere-bosh
     serial_groups: [vsphere-bosh]
     plan:
-    - get: micropcf-ci
+    - aggregate:
+      - get: micropcf-ci
+      - get: vsphere-bosh-state
     - task: deploy-vsphere-bosh
       tags: [vsphere-linux-worker]
       file: micropcf-ci/tasks/deploy-vsphere-bosh/task.yml
@@ -151,6 +161,9 @@ jobs:
           VCENTER_ADDRESS: {{vcenter-address}}
           VCENTER_USERNAME: {{vcenter-username}}
           VCENTER_PASSWORD: {{vcenter-password}}
+    - put: vsphere-bosh-state
+      params:
+        from: deploy-vsphere-bosh/bosh-state.json
 
   - name: deploy-vsphere-worker
     serial_groups: [vsphere-bosh]

@@ -3,6 +3,7 @@ platform: linux
 image: docker:///micropcf/ci
 inputs:
 - name: micropcf-ci
+- name: vsphere-bosh-state
 run:
   path: micropcf-ci/tasks/deploy-vsphere-bosh/run.sh
 params:
