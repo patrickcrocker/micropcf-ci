@@ -18,3 +18,4 @@ params:
   AWS_SECRET_ACCESS_KEY: some-aws-secret-access-key
   DISTRO: some-distro
   NAMES: some-names
+  IGNORE_PATHS: []
