@@ -16,7 +16,7 @@ set -x
 current_version=$(cat "current-$DISTRO-box-version/number")
 next_version=$(cat "next-$DISTRO-box-version/number")
 current_box_commit=$(cat "$DISTRO-box-commit/base-box-commit")
-next_box_commit=$(git log --grep '\[ci skip\]' --invert-grep --format='%H' -1 -- images)
+next_box_commit=$(git -C micropcf log --grep '\[ci skip\]' --invert-grep --format='%H' -1 -- images)
 
 if [[ $current_box_commit == $next_box_commit ]]; then
   echo -n $current_box_commit > box-commit
