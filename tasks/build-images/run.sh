@@ -16,7 +16,7 @@ set -x
 current_version=$(cat "current-$DISTRO-box-version/number")
 next_version=$(cat "next-$DISTRO-box-version/number")
 current_box_commit=$(cat "$DISTRO-box-commit/base-box-commit")
-next_box_commit=$(git -C "$DISTRO-image-changes" rev-parse -q --verify HEAD)
+next_box_commit=$(git log --grep '\[ci skip\]' --invert-grep --format='%H' -1 -- images)
 
 if [[ $current_box_commit == $next_box_commit ]]; then
   echo -n $current_box_commit > box-commit
@@ -24,9 +24,10 @@ if [[ $current_box_commit == $next_box_commit ]]; then
   exit 0
 fi
 
-git -C "$DISTRO-image-changes" submodule update --init --recursive
+git -C micropcf checkout "$next_box_commit"
+git -C micropcf submodule update --init --recursive
 
-micropcf_json=$(cat "$DISTRO-image-changes/images/micropcf.json")
+micropcf_json=$(cat "micropcf/images/micropcf.json")
 post_processor_json=`
 cat <<EOF
 {
@@ -72,7 +73,7 @@ cat <<EOF
 EOF
 `
 
-echo $micropcf_json | jq '. + '"$post_processor_json" > "$DISTRO-image-changes/images/micropcf.json"
+echo $micropcf_json | jq '. + '"$post_processor_json" > "micropcf/images/micropcf.json"
 
 ssh-keyscan $REMOTE_EXECUTOR_ADDRESS >> $HOME/.ssh/known_hosts
 remote_path=$(ssh -i remote_executor.pem vcap@$REMOTE_EXECUTOR_ADDRESS mktemp -d /tmp/build-images.XXXXXXXX)
@@ -80,15 +81,15 @@ remote_path=$(ssh -i remote_executor.pem vcap@$REMOTE_EXECUTOR_ADDRESS mktemp -d
 function cleanup { ssh -i remote_executor.pem vcap@$REMOTE_EXECUTOR_ADDRESS rm -rf "$remote_path"; }
 trap cleanup EXIT
 
-rsync -a -e "ssh -i remote_executor.pem" "$DISTRO-image-changes" vcap@$REMOTE_EXECUTOR_ADDRESS:$remote_path/
-rm -rf "$DISTRO-image-changes" || true
+rsync -a -e "ssh -i remote_executor.pem" micropcf vcap@$REMOTE_EXECUTOR_ADDRESS:$remote_path/
+rm -rf micropcf || true
 
 ssh -i remote_executor.pem vcap@$REMOTE_EXECUTOR_ADDRESS <<EOF
   export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
   export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
   export ATLAS_TOKEN="$ATLAS_TOKEN"
   cd "$remote_path"
-  "$DISTRO-image-changes/images/$DISTRO/build" -var "version=$next_version" -only=$NAMES
+  "micropcf/images/$DISTRO/build" -var "version=$next_version" -only=$NAMES
 EOF
 
 echo -n $next_box_commit > box-commit

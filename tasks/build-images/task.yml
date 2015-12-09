@@ -2,8 +2,8 @@
 platform: linux
 image: docker:///micropcf/ci
 inputs:
+- name: micropcf
 - name: micropcf-ci
-- name: base-image-changes
 - name: current-base-box-version
 - name: next-base-box-version
 - name: base-box-commit

@@ -10,13 +10,6 @@ resources:
       uri: git@github.com:pivotal-cf/micropcf.git
       branch: master
       private_key: {{github-ssh-key}}
-  - name: base-image-changes
-    type: git
-    source:
-      uri: git@github.com:pivotal-cf/micropcf.git
-      branch: master
-      private_key: {{github-ssh-key}}
-      paths: [images]
 
   - name: base-box-version
     type: semver
@@ -90,9 +83,6 @@ jobs:
       - get: micropcf-ci
       - get: micropcf
         trigger: true
-        params:
-          submodules: none
-      - get: base-image-changes
         params:
           submodules: none
       - get: base-box-commit
