@@ -77,7 +77,7 @@ EOF
 echo $micropcf_json | jq '. + '"$post_processor_json" > "micropcf/images/micropcf.json"
 
 ssh-keyscan $REMOTE_EXECUTOR_ADDRESS >> $HOME/.ssh/known_hosts
-remote_path=$(ssh -i remote_executor.pem vcap@$REMOTE_EXECUTOR_ADDRESS mktemp -d /tmp/build-images.XXXXXXXX)
+remote_path=$(ssh -i remote_executor.pem vcap@$REMOTE_EXECUTOR_ADDRESS mktemp -td build-images.XXXXXXXX)
 
 function cleanup { ssh -i remote_executor.pem vcap@$REMOTE_EXECUTOR_ADDRESS rm -rf "$remote_path"; }
 trap cleanup EXIT

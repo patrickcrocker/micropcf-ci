@@ -238,6 +238,12 @@ jobs:
             VAGRANTFILE_PATH: vagrantfile-ci/Vagrantfile-v*.base
       - task: dats
         file: micropcf-ci/tasks/dats/task.yml
+        config:
+          params:
+            AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+            AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+            AWS_SSH_PRIVATE_KEY: {{aws-ssh-private-key}}
+            AWS_SSH_PRIVATE_KEY_NAME: {{aws-ssh-private-key-name}}
       ensure:
         task: cleanup-deploy
         file: micropcf-ci/tasks/cleanup-deploy/task.yml

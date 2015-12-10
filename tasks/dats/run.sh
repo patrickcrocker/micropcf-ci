@@ -2,6 +2,9 @@
 
 set -ex
 
+export AWS_SSH_PRIVATE_KEY_PATH=$PWD/key.pem
+echo "$AWS_SSH_PRIVATE_KEY" > "$AWS_SSH_PRIVATE_KEY_PATH"
+
 git -C micropcf submodule update --init images/releases/diego-release
 git -C micropcf/images/releases/diego-release submodule update --init src/github.com/cloudfoundry-incubator/diego-acceptance-tests
 
