@@ -10,7 +10,8 @@ set -x
 domain=$(cat deploy/domain)
 ip=${domain%.xip.io}
 
-echo $ip $domain >> /etc/hosts
+echo "address=/$domain/$ip" >> /etc/dnsmasq.d/xip.io
+service dnsmasq start
 
 git -C micropcf submodule update --init images/releases/diego-release
 git -C micropcf/images/releases/diego-release submodule update --init --recursive
