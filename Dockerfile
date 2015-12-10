@@ -5,6 +5,7 @@ ENV PATH /usr/local/go/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bi
 ENV GOROOT /usr/local/go
 ENV GO_VERSION 1.5.1
 ENV CF_VERSION 6.14.0
+ENV RTR_VERSION 2.3.0
 ENV VAGRANT_VERSION 1.7.4
 ENV PACKER_VERSION 0.8.6
 ENV BOSH_INIT_VERSION 0.0.77
@@ -27,6 +28,10 @@ RUN \
 RUN \
   cd /usr/local/bin && \
   (curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=${CF_VERSION}&source=github-rel" | tar -xz)
+
+RUN \
+  cd /usr/local/bin && \
+  (curl -L "https://github.com/cloudfoundry-incubator/routing-api-cli/releases/download/${RTR_VERSION}/rtr-linux-amd64.tgz" | tar -xz)
 
 RUN \
   wget --quiet "https://dl.bintray.com/mitchellh/vagrant/vagrant_${VAGRANT_VERSION}_x86_64.deb" && \
