@@ -2,7 +2,7 @@
 
 set -ex
 
-git -C micopcf fetch --tags
+git -C micropcf fetch --tags
 release_version=$(git -C micropcf describe --abbrev=0)
 vagrantfile_sha=$(git -C micropcf rev-parse --short "$release_version^{commit}")
 
