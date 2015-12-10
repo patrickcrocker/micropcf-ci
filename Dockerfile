@@ -55,3 +55,6 @@ RUN \
   ssh-keyscan github.com >> $HOME/.ssh/known_hosts && \
   git config --global user.email "micropcf-eng@pivotal.io" && \
   git config --global user.name "Concourse CI"
+
+RUN \
+  echo "user=root" > /etc/dnsmasq.d/root
