@@ -258,15 +258,11 @@ jobs:
     plan:
     - get: micropcf
       trigger: true
-      passed:
-      - cats-base-aws
-      - dats-base-aws
+      passed: [generate-vagrantfiles]
       params:
         submodules: none
     - get: base-vagrantfile-ci
-      passed:
-      - cats-base-aws
-      - dats-base-aws
+      passed: [generate-vagrantfiles]
     - put: base-vagrantfile-acceptance
       params:
         from: base-vagrantfile-ci/Vagrantfile-v(.*)[.]base
@@ -282,9 +278,7 @@ jobs:
     - get: publish-nightly-timer
       trigger: true
     - get: base-vagrantfile-ci
-      passed:
-      - cats-base-aws
-      - dats-base-aws
+      passed: [generate-vagrantfiles]
     - put: base-vagrantfile-nightly
       params:
         from: base-vagrantfile-ci/Vagrantfile-v(.*)[.]base
